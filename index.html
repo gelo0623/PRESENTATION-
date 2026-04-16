@@ -4,238 +4,277 @@
 <meta charset="UTF-8">
 <title>Excuse Generator 3000</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
 body{
-    margin:0;
-    font-family:'Fredoka', sans-serif;
-    background:#0f172a;
-    color:white;
-    overflow:hidden;
+margin:0;
+font-family:Arial;
+background:#0b1220;
+color:white;
+overflow:hidden;
+}
+
+.hero-title{
+font-size:44px;
+font-weight:bold;
+text-align:center;
+margin-top:50px;
+animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.05);}
+100%{transform:scale(1);}
+}
+
+.block{
+position:absolute;
+width:30px;
+height:30px;
+background:#38bdf8;
+opacity:0.08;
+animation:fall 6s linear infinite;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh) rotate(0deg);}
+100%{transform:translateY(110vh) rotate(360deg);}
 }
 
 .screen{
-    display:none;
-    height:100vh;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
+display:none;
+height:100vh;
+justify-content:center;
+align-items:center;
+flex-direction:column;
 }
 
 .active{display:flex;}
 
-.card{
-    background:#111827cc;
-    padding:30px;
-    border-radius:20px;
-    width:340px;
+.box{
+background:#111827;
+padding:25px;
+border-radius:15px;
+width:380px;
+text-align:center;
 }
 
 input,select{
-    width:90%;
-    padding:10px;
-    margin:10px 0;
-    border-radius:10px;
-    border:none;
+width:90%;
+padding:10px;
+margin:8px 0;
+border:none;
+border-radius:8px;
 }
 
 button{
-    padding:12px 20px;
-    border:none;
-    border-radius:12px;
-    background:#38bdf8;
-    color:white;
-    cursor:pointer;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#38bdf8;
+color:white;
+cursor:pointer;
+margin:5px;
+animation:pulse 1.2s infinite;
 }
 
-#output{
-    font-family:Arial;
-    white-space:pre-line;
-    text-align:left;
-    font-size:14px;
+.result-box{
+background:#0f172a;
+padding:12px;
+border-radius:10px;
+margin:10px 0;
+text-align:left;
+}
+
+.copy-btn{
+background:#22c55e;
+padding:5px;
+font-size:12px;
+margin-top:5px;
+}
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modal-box{
+background:linear-gradient(45deg,gold,orange);
+padding:25px;
+border-radius:15px;
+text-align:center;
+width:300px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- STEP 1 -->
-<div id="step1" class="screen active">
-<div class="card">
-<h1>Excuse Generator 3000</h1>
-<button onclick="next('step2')">Start</button>
-</div>
+<!-- CHAOS BACKGROUND -->
+<script>
+for(let i=0;i<25;i++){
+let d=document.createElement("div");
+d.className="block";
+d.style.left=Math.random()*100+"vw";
+d.style.animationDuration=(3+Math.random()*6)+"s";
+document.body.appendChild(d);
+}
+</script>
+
+<!-- PAGE 1 -->
+<div id="page1" class="screen active">
+<div class="hero-title">EXCUSE GENERATOR 3000</div>
+<button onclick="next('page2')">START</button>
 </div>
 
-<!-- STEP 2 -->
-<div id="step2" class="screen">
-<div class="card">
-<h1>Details</h1>
+<!-- PAGE 2 -->
+<div id="page2" class="screen">
+<div class="box">
+<h2>Input Details</h2>
 <input id="name" placeholder="Your Name">
-<input id="target" placeholder="Teacher / Boss">
-<button onclick="next('step3')">Next</button>
+<input id="teacher" placeholder="Teacher / Professor">
+
+<button onclick="next('page3')">Next</button>
 </div>
 </div>
 
-<!-- STEP 3 -->
-<div id="step3" class="screen">
-<div class="card">
-<h1>Output Type</h1>
+<!-- PAGE 3 -->
+<div class="screen" id="page3">
+<div class="box">
+<h2>Type</h2>
+
 <select id="type">
-<option value="message">Message</option>
 <option value="email">Email</option>
+<option value="message">Message</option>
 </select>
-<button onclick="next('step4')">Next</button>
+
+<button onclick="next('page4')">Next</button>
 </div>
 </div>
 
-<!-- STEP 4 -->
-<div id="step4" class="screen">
-<div class="card">
-<h1>Situation</h1>
+<!-- PAGE 4 -->
+<div class="screen" id="page4">
+<div class="box">
+<h2>Situation</h2>
+
 <select id="reason">
-<option value="late">Late Submission</option>
+<option value="late">Late</option>
 <option value="absent">Absent</option>
 <option value="nosubmit">No Submission</option>
 <option value="lazy">Lazy</option>
 <option value="group">Group Issue</option>
 </select>
+
 <button onclick="generate()">Generate</button>
 </div>
 </div>
 
 <!-- RESULT -->
-<div id="result" class="screen">
-<div class="card">
-<h1>Output</h1>
+<div class="screen" id="page5">
+<div class="box">
+<h2>Result</h2>
 <div id="output"></div>
-<button onclick="copyText()">Copy</button>
+<button onclick="back('page5')">Back</button>
 </div>
 </div>
 
 <script>
+
+/* NAV */
 function next(id){
 document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
 document.getElementById(id).classList.add('active');
 }
 
-/* ===== BASE KANAL EXCUSES ===== */
-function getBase(reason, target, name){
+function back(){
+next('page4');
+}
+
+/* =========================
+   🔥 YOUR CUSTOM EXCUSES
+   EDIT HERE ONLY
+========================= */
+function gen(reason){
 
 const data = {
-late:`Good day ${target}.
-
-Sorry po sa late submission. Naunahan po ako ng “mamaya na” mentality ko.
-
-- ${name}`,
-
-absent:`Good day ${target}.
-
-Absent po ako kasi yung katawan ko nasa school pero yung utak ko naka-airplane mode.
-
-- ${name}`,
-
-nosubmit:`Good day ${target}.
-
-Naintindihan ko po yung task, pero yung motivation ko nag-file ng leave.
-
-- ${name}`,
-
-lazy:`Good day ${target}.
-
-Wala po akong excuse. Tamad lang po talaga.
-
-- ${name}`,
-
-group:`Good day ${target}.
-
-Group work po pero naging solo survival mode po.
-
-- ${name}`
+late: `Sir/Ma'am, I sincerely apologize for the late submission. I underestimated the time required and got delayed due to poor planning.`,
+absent: `Sir/Ma'am, I was unable to attend due to unforeseen personal circumstances that affected my availability.`,
+nosubmit: `Sir/Ma'am, I acknowledge that I failed to submit the requirement due to lack of proper time management.`,
+lazy: `Sir/Ma'am, I honestly struggled with motivation and failed to complete the task on time.`,
+group: `Sir/Ma'am, our group experienced coordination issues which affected our ability to complete the output properly.`
 };
 
 return data[reason];
 }
 
-/* ===== EMAIL MODE (LONG FORM FORMAL + FUNNY CORE) ===== */
-function buildEmail(base, name, target){
+/* =========================
+   📧 EMAIL FORMAT (LONG)
+========================= */
+function buildEmail(msg,name,teacher){
+return `
+Subject: Academic Requirement Submission
 
-return `Subject: Academic Submission Report
-
-To: ${target}
+To: ${teacher}
 
 Good day,
 
 I hope this message finds you well.
 
-I am writing this formal report to explain the status of my requirement.
+I am writing this email to formally explain my submission regarding the assigned academic requirement.
 
 --------------------------------------------------
 
-${base}
+${msg}
 
 --------------------------------------------------
 
-I acknowledge the importance of deadlines and responsibility. I understand my shortcomings in time management and execution, and I will work on improving my consistency moving forward.
+I fully understand the importance of deadlines and academic responsibility. I take full accountability for this and will improve my performance moving forward.
 
-Thank you for your understanding.
+Thank you for your understanding and consideration.
 
 Respectfully,
-${name}`;
+${name}
+`;
 }
 
-/* ===== MESSAGE MODE (CHAOTIC GEN Z PANIC 🌀💀) ===== */
-function buildMessage(base){
-
-const chaos=[
-"wait let me explain",
-"bro hindi ko talaga sinasadya",
-"okay hear me out",
-"teacher pls don't judge",
-"this made sense earlier i swear",
-"i swear this is valid 😭",
-"everything was under control until it wasn't",
-"my brain lagged mid-update",
-"real talk idk what happened",
-"this is not what it looks like"
-];
-
-const random = chaos[Math.floor(Math.random()*chaos.length)];
-
-return `${random}
-
-${base}
-
-i swear this sounded better in my head 😭`;
+/* =========================
+   💬 MESSAGE FORMAT (RAW)
+========================= */
+function buildMessage(msg){
+return msg;
 }
 
-/* ===== GENERATE ===== */
+/* =========================
+   GENERATE OUTPUT
+========================= */
 function generate(){
 
-const name=document.getElementById("name").value || "Student";
-const target=document.getElementById("target").value || "Sir/Ma'am";
-const type=document.getElementById("type").value;
-const reason=document.getElementById("reason").value;
+let name=document.getElementById("name").value || "Student";
+let teacher=document.getElementById("teacher").value || "Sir/Ma'am";
+let type=document.getElementById("type").value;
+let reason=document.getElementById("reason").value;
 
-const base = getBase(reason, target, name);
+let msg = gen(reason);
 
 let output="";
 
 if(type==="email"){
-output = buildEmail(base, name, target);
+output = buildEmail(msg,name,teacher);
 }else{
-output = buildMessage(base);
+output = buildMessage(msg);
 }
 
 document.getElementById("output").innerText=output;
-next("result");
+next('page5');
 }
 
-function copyText(){
-navigator.clipboard.writeText(document.getElementById("output").innerText);
-alert("Copied");
-}
 </script>
 
 </body>
