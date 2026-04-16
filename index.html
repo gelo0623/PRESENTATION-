@@ -25,7 +25,7 @@ font-family:Arial;
 background:var(--bg);
 color:var(--text);
 overflow:hidden;
-transition:0.4s;
+transition:0.3s;
 }
 
 /* BACKGROUND BLOCKS */
@@ -35,12 +35,12 @@ width:40px;
 height:40px;
 background:var(--accent);
 opacity:0.08;
-animation:move 8s linear infinite;
+animation:float 8s linear infinite;
 }
 
-@keyframes move{
+@keyframes float{
 0%{transform:translateY(100vh) rotate(0deg);}
-100%{transform:translateY(-100vh) rotate(360deg);}
+100%{transform:translateY(-120vh) rotate(360deg);}
 }
 
 /* UI */
@@ -54,49 +54,74 @@ flex-direction:column;
 
 .active{display:flex;}
 
+/* FIXED BIG CARD */
 .card{
 background:var(--card);
-padding:25px;
+padding:30px;
 border-radius:15px;
-width:350px;
+width:450px;
+max-height:80vh;
+overflow:auto;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
 input,select{
-width:90%;
-padding:10px;
+width:100%;
+padding:12px;
 margin:8px 0;
 border:none;
 border-radius:8px;
 }
 
 button{
-padding:10px 15px;
+padding:12px 16px;
 border:none;
 border-radius:10px;
 background:var(--accent);
 color:white;
 cursor:pointer;
 margin:5px;
-animation:pulse 1.3s infinite;
+animation:pulse 1.2s infinite;
 }
 
 @keyframes pulse{
 0%{transform:scale(1);}
-50%{transform:scale(1.08);}
+50%{transform:scale(1.06);}
 100%{transform:scale(1);}
 }
 
-/* TOP BAR */
+#output{
+white-space:pre-wrap;
+font-family:Arial;
+line-height:1.5;
+}
+
+/* TOP BUTTON */
 .topbar{
 position:absolute;
 top:10px;
 right:10px;
-z-index:10;
 }
 
-#output{
-white-space:pre-line;
-font-family:Arial;
+/* MODAL */
+.modal{
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:white;
+color:black;
+padding:25px;
+border-radius:12px;
+width:300px;
+text-align:center;
 }
 </style>
 </head>
@@ -108,9 +133,19 @@ font-family:Arial;
 <button onclick="toggle()">Toggle Mode</button>
 </div>
 
-<!-- BACKGROUND BLOCKS -->
+<!-- PREMIUM MODAL -->
+<div class="modal" id="premiumModal">
+<div class="modal-content">
+<h2>🔒 Premium Locked</h2>
+<p>Unlock Formal Mode for ₱999</p>
+<button onclick="unlockPremium()">Unlock Now</button>
+<button onclick="closeModal()">Cancel</button>
+</div>
+</div>
+
 <script>
-for(let i=0;i<20;i++){
+/* BACKGROUND BLOCKS */
+for(let i=0;i<18;i++){
 let d=document.createElement("div");
 d.className="block";
 d.style.left=Math.random()*100+"vw";
@@ -146,7 +181,7 @@ document.body.appendChild(d);
 <div class="card">
 <h3>Tone</h3>
 <select id="tone">
-<option value="formal">Formal (Premium 🔒 999)</option>
+<option value="formal">Formal Mode 🔒</option>
 <option value="informal">Informal Chaos</option>
 </select>
 
@@ -160,9 +195,9 @@ document.body.appendChild(d);
 <div class="card">
 <h3>Situation</h3>
 <select id="reason">
-<option value="late">Late</option>
+<option value="late">Late Submission</option>
 <option value="absent">Absent</option>
-<option value="nosubmit">No Submit</option>
+<option value="nosubmit">No Submission</option>
 <option value="lazy">Lazy</option>
 <option value="group">Group Issue</option>
 </select>
@@ -175,7 +210,7 @@ document.body.appendChild(d);
 <!-- RESULT -->
 <div id="result" class="screen">
 <div class="card">
-<h3>Output</h3>
+<h2>Output</h2>
 <div id="output"></div>
 <button onclick="copy()">Copy</button>
 <button onclick="back('s4')">Back</button>
@@ -183,6 +218,9 @@ document.body.appendChild(d);
 </div>
 
 <script>
+
+let premium=false;
+
 function next(id){
 document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
 document.getElementById(id).classList.add('active');
@@ -196,32 +234,57 @@ function toggle(){
 document.body.classList.toggle("light");
 }
 
+/* MODAL */
+function openModal(){
+document.getElementById("premiumModal").style.display="flex";
+}
+function closeModal(){
+document.getElementById("premiumModal").style.display="none";
+}
+function unlockPremium(){
+premium=true;
+closeModal();
+alert("Premium Unlocked (Fake 😭)");
+}
+
 /* EXCUSES */
-function getInformal(reason){
+function getInformal(r){
+
 const d={
-late:["Sir my notebook ate my dog 😭","Sir deadline scared my laptop so it shut down","Sir I blinked and suddenly it was due"],
-absent:["Sir I attended class in another timeline","Sir my body was present but brain on airplane mode","Sir alarm and I had a legal dispute"],
-nosubmit:["Sir I finished it mentally but forgot reality","Sir file went to another dimension","Sir submit button rejected me"],
-lazy:["Sir productivity left the chat","Sir my brain said no today","Sir I was buffering in real life"],
-group:["Sir group became solo survival mode","Sir we agreed spiritually only","Sir teamwork disconnected mid-loading"]
+late:["Sir my notebook ate my dog 😭","Sir deadline scared my laptop so it shut down","Sir I blinked and it was due already"],
+absent:["Sir I attended class in another timeline","Sir my body was present but brain AFK","Sir I think I was in parallel universe"],
+nosubmit:["Sir I finished it mentally but forgot reality","Sir file went to dimension X","Sir submit button rejected me"],
+lazy:["Sir productivity left the chat","Sir my brain said ‘nope’","Sir I was buffering IRL"],
+group:["Sir group became solo survival","Sir teamwork disconnected mid-match","Sir we agreed spiritually"]
 };
-return d[reason][Math.floor(Math.random()*d[reason].length)];
+
+return d[r][Math.floor(Math.random()*d[r].length)];
 }
 
-function getFormal(reason){
-return `🔒 PREMIUM MODE REQUIRED
+function getFormal(r){
 
-Upgrade to PRO (₱999) to unlock formal excuses.
+return `Dear Sir/Ma’am,
 
-Still here’s free chaos:
+I respectfully submit this explanation regarding my requirement status.
 
-${getInformal(reason)}`;
+${getInformal(r)}
+
+I sincerely acknowledge my responsibility and will improve moving forward.
+
+Thank you.`;
 }
 
+/* GENERATE */
 function generate(){
+
 let type=document.getElementById("type").value;
 let tone=document.getElementById("tone").value;
 let reason=document.getElementById("reason").value;
+
+if(tone==="formal" && !premium){
+openModal();
+return;
+}
 
 let base = tone==="formal" ? getFormal(reason) : getInformal(reason);
 
@@ -244,6 +307,7 @@ function copy(){
 navigator.clipboard.writeText(document.getElementById("output").innerText);
 alert("Copied");
 }
+
 </script>
 
 </body>
