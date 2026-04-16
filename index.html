@@ -3,31 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <title>Excuse Generator 3000</title>
+
 <style>
-    body { margin:0; font-family:Arial; background:#0b1220; color:white; overflow:hidden; }
-    .hero-title { font-size:44px; font-weight:bold; text-align:center; margin-top:50px; animation:pulse 1.2s infinite; }
-    @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.05);} 100%{transform:scale(1);} }
-    .block { position:absolute; width:30px; height:30px; background:#38bdf8; opacity:0.08; animation:fall 6s linear infinite; }
-    @keyframes fall { 0%{transform:translateY(-10vh) rotate(0deg);} 100%{transform:translateY(110vh) rotate(360deg);} }
-    .screen { display:none; height:100vh; justify-content:center; align-items:center; flex-direction:column; }
-    .active { display:flex; }
-    .box { background:#111827; padding:25px; border-radius:15px; width:380px; text-align:center; }
-    input, select { width:90%; padding:10px; margin:8px 0; border:none; border-radius:8px; }
-    button { padding:12px; border:none; border-radius:10px; background:#38bdf8; color:white; cursor:pointer; margin:5px; animation:pulse 1.2s infinite; }
-    .result-box { background:#0f172a; padding:12px; border-radius:10px; margin:10px 0; text-align:left; font-size:14px; }
-    .copy-btn { background:#22c55e; padding:5px; font-size:12px; margin-top:5px; display:block; width:100%; }
+body{ margin:0; font-family:Arial; background:#0b1220; color:white; overflow:hidden; }
+
+/* HERO TITLE */
+.hero-title{ font-size:44px; font-weight:bold; text-align:center; margin-top:50px; animation:pulse 1.2s infinite; }
+@keyframes pulse{ 0%{transform:scale(1);} 50%{transform:scale(1.05);} 100%{transform:scale(1);} }
+
+/* BACKGROUND CHAOS */
+.block{ position:absolute; width:30px; height:30px; background:#38bdf8; opacity:0.08; animation:fall 6s linear infinite; }
+@keyframes fall{ 0%{transform:translateY(-10vh) rotate(0deg);} 100%{transform:translateY(110vh) rotate(360deg);} }
+
+/* SCREEN SYSTEM */
+.screen{ display:none; height:100vh; justify-content:center; align-items:center; flex-direction:column; }
+.active{ display:flex; }
+
+/* BOX */
+.box{ background:#111827; padding:25px; border-radius:15px; width:380px; text-align:center; }
+
+/* INPUTS */
+input,select{ width:90%; padding:10px; margin:8px 0; border:none; border-radius:8px; }
+
+/* BUTTONS */
+button{ padding:12px; border:none; border-radius:10px; background:#38bdf8; color:white; cursor:pointer; margin:5px; animation:pulse 1.2s infinite; }
+
+/* RESULT */
+.result-box{ background:#0f172a; padding:12px; border-radius:10px; margin:10px 0; text-align:left; font-size:14px; }
+
+/* COPY */
+.copy-btn{ background:#22c55e; padding:5px; font-size:12px; margin-top:5px; display:block; width:100%; }
+
+/* MODAL */
+.modal{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; }
+.modal-box{ background:linear-gradient(45deg,gold,orange); color:white; padding:25px; border-radius:15px; text-align:center; width:300px; box-shadow:0 0 20px gold; }
 </style>
 </head>
 
 <body>
+
 <script>
-    for(let i=0; i<25; i++){
-        let d = document.createElement("div");
-        d.className = "block";
-        d.style.left = Math.random()*100 + "vw";
-        d.style.animationDuration = (3+Math.random()*6) + "s";
-        document.body.appendChild(d);
-    }
+for(let i=0;i<25;i++){
+    let d=document.createElement("div");
+    d.className="block";
+    d.style.left=Math.random()*100+"vw";
+    d.style.animationDuration=(3+Math.random()*6)+"s";
+    document.body.appendChild(d);
+}
 </script>
 
 <div id="page1" class="screen active">
@@ -52,7 +74,10 @@
             <option value="email">Email</option>
             <option value="message">Message</option>
         </select>
-        <select id="tone"><option value="informal">Informal</option></select>
+        <select id="tone" onchange="checkTone()">
+            <option value="informal">Informal (Free)</option>
+            <option value="formal">Formal (Premium 🔒)</option>
+        </select>
         <button onclick="next('page4')">Next</button>
         <button onclick="back('page3')">Back</button>
     </div>
@@ -73,7 +98,10 @@
     </div>
 </div>
 
-<div id="page5" class="screen"><h2>Initializing...</h2></div>
+<div id="page5" class="screen">
+    <h2>Initializing Excuse...</h2>
+    <p>Processing reality distortion…</p>
+</div>
 
 <div id="page6" class="screen">
     <div class="box">
@@ -83,23 +111,97 @@
     </div>
 </div>
 
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <h2>💰 PREMIUM REQUIRED</h2>
+        <p>Unlock Formal Mode for $999</p>
+        <button onclick="unlock()">Pay Now</button>
+        <button onclick="closeModal()">Back</button>
+    </div>
+</div>
+
 <script>
+let premium=false;
+
 function next(id){
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
+
 function back(id){
-    const map = {page2:"page1", page3:"page2", page4:"page3", page5:"page4", page6:"page4"};
+    const map={ page2:"page1", page3:"page2", page4:"page3", page5:"page4", page6:"page4" };
     next(map[id]);
+}
+
+function checkTone(){
+    let tone=document.getElementById("tone").value;
+    if(tone==="formal" && !premium){
+        document.getElementById("modal").style.display="flex";
+        document.getElementById("tone").value="informal";
+    }
+}
+
+function closeModal(){
+    document.getElementById("modal").style.display="none";
+    document.getElementById("tone").value="informal";
+}
+
+function unlock(){
+    premium=true;
+    document.getElementById("modal").style.display="none";
+    document.getElementById("tone").value="formal";
 }
 
 function gen(reason, type) {
     const data = {
         late: {
-            email: ["Dear Professor, I apologize for my tardiness today due to transportation failure.", "Please excuse my late arrival; I encountered significant delays on my route.", "I am sorry for being late as I had an urgent household emergency.", "Please accept my apologies for my tardiness; my alarm failed to trigger.", "I am sorry for being late today; I had trouble finding parking."],
+            email: ["Dear Professor, I apologize for my tardiness due to transportation failure.", "Please excuse my late arrival; I encountered significant delays on my route.", "I am sorry for being late as I had an urgent household emergency.", "Please accept my apologies for my tardiness; my alarm failed to trigger.", "I am sorry for being late today; I had trouble finding parking."],
             message: ["Running about 15 mins late!", "Stuck in traffic, will be there soon.", "So sorry I'm late! Car wouldn't start.", "Running behind schedule, don't start without me!", "Apologies! Had a last-minute emergency."]
         },
         absent: {
+            email: ["Dear Professor, I cannot attend class today due to illness.", "Please excuse my absence; I have an urgent family matter.", "I am writing to let you know I cannot attend due to a medical appointment.", "Please accept my apologies for missing class; I have a personal conflict.", "I am unable to join today as I am assisting a family member."],
+            message: ["Feeling under the weather, won't make it.", "Can't make it today, family emergency.", "So sorry, have a forgotten appointment!", "Won't be in, dealing with personal stuff.", "Stuck at home for an urgent matter."]
+        },
+        nosubmit: {
+            email: ["I encountered a technical error during upload.", "I accidentally submitted an outdated draft.", "My computer crashed during export.", "The portal appears to be throwing an error.", "I experienced a power outage, may I have an extension?"],
+            message: ["File is acting up! Can I send later?", "Computer crashed during submit! Fixing now.", "Uploaded wrong file, so sorry!", "Portal isn't working, can I email you?", "Having major internet issues, will send ASAP."]
+        },
+        lazy: {
+            email: ["I am currently feeling burnt out and need a brief recharge.", "I am struggling to focus on this task due to academic fatigue.", "I've been overwhelmed by other deadlines.", "I am currently experiencing a severe case of writer's block.", "I request a short extension to reset my productivity."],
+            message: ["Total burnout mode, taking a quick break.", "Struggling to focus today, gonna take it slow.", "Way too many deadlines, need a sec.", "Writer's block is real today!", "Taking a quick reset, will tackle this later."]
+        },
+        group: {
+            email: ["Communication within our team has been quite challenging.", "I am waiting on critical inputs from other group members.", "The project scope was unclear, causing confusion.", "I have had to handle most of the work myself.", "Scheduling conflicts have made collaboration difficult."],
+            message: ["Team communication is super messy right now.", "Still waiting on the rest of the group.", "Confused on the project scope, need clarification.", "Doing most of the work, will be ready soon.", "Group schedules are all over the place!"]
+        }
+    };
+    return data[reason][type];
+}
+
+function loading(){
+    next('page5');
+    setTimeout(()=>{ generate(); next('page6'); }, 1500);
+}
+
+function generate(){
+    let reason = document.getElementById("reason").value;
+    let type = document.getElementById("type").value;
+    let list = gen(reason, type);
+    let html = "";
+    list.forEach(e=>{
+        html += `<div class="result-box">${e}<button class="copy-btn" onclick="copy('${e.replace(/'/g, "\\'")}')">Copy</button></div>`;
+    });
+    document.getElementById("output").innerHTML = html;
+}
+
+function copy(text){
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
+</script>
+
+</body>
+</html>
             email: ["Dear Professor, I cannot attend class today due to illness.", "Please excuse my absence; I have an urgent family matter.", "I am writing to let you know I cannot attend due to a medical appointment.", "Please accept my apologies for missing class; I have a personal conflict.", "I am unable to join today as I am assisting a family member."],
             message: ["Feeling under the weather, won't make it.", "Can't make it today, family emergency.", "So sorry, have a forgotten appointment!", "Won't be in, dealing with personal stuff.", "Stuck at home for an urgent matter."]
         },
