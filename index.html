@@ -1,3 +1,37 @@
+Skip to content
+gelo0623
+Draft
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Actions
+Projects
+Wiki
+Security and quality
+Insights
+Settings
+Important update
+On April 24 we'll start using GitHub Copilot interaction data for AI model training unless you opt out. Review this update and manage your preferences in your GitHub account settings.
+Files
+Go to file
+t
+T
+index.html
+Draft
+/index.html
+gelo0623
+gelo0623
+Refactor CSS and JavaScript for consistency
+45285ed
+ · 
+3 hours ago
+
+Code
+
+Blame
+205 lines (174 loc) · 8.57 KB
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,25 +189,75 @@ function unlock(){
 function gen(reason, type) {
     const data = {
         late: {
-            email: ["Dear Professor, I apologize for my tardiness due to transportation failure.", "Please excuse my late arrival; I encountered significant delays on my route.", "I am sorry for being late as I had an urgent household emergency.", "Please accept my apologies for my tardiness; my alarm failed to trigger.", "I am sorry for being late today; I had trouble finding parking."],
-            message: ["Running about 15 mins late!", "Stuck in traffic, will be there soon.", "So sorry I'm late! Car wouldn't start.", "Running behind schedule, don't start without me!", "Apologies! Had a last-minute emergency."]
+            email: ["Dear Professor, I apologize for my tardiness due to transportation failure.", 
+            "Please excuse my late arrival; I encountered significant delays on my route.", 
+            "I am sorry for being late as I had an urgent household emergency.", 
+            "Please accept my apologies for my tardiness; my alarm failed to trigger.", 
+            "I am sorry for being late today; I had trouble finding parking."],
+
+            message: ["Sorry for the late submission, akala ko po may bukas pa. ", 
+            "Sorry po, pwede pa po ba madaan sa floorwax?.", 
+            "Ginawa ko naman po siya...sa isip ko, counted po ba yon?", 
+            "Sinubukan ko pong tapusin, pero ako po yung natapos:(", 
+            "SLS, sorry late submit, hehe."]
         },
+
         absent: {
-            email: ["Dear Professor, I cannot attend class today due to illness.", "Please excuse my absence; I have an urgent family matter.", "I am writing to let you know I cannot attend due to a medical appointment.", "Please accept my apologies for missing class; I have a personal conflict.", "I am unable to join today as I am assisting a family member."],
-            message: ["Feeling under the weather, won't make it.", "Can't make it today, family emergency.", "So sorry, have a forgotten appointment!", "Won't be in, dealing with personal stuff.", "Stuck at home for an urgent matter."]
+            email: ["Gising na po ako kanina, hindi lang po ako bumangon.", 
+            "I was there po spiritually, but not physically.", 
+            "Late na po ako, tinuloy ko na pong maging absent.", 
+            "Please accept my apologies for missing class; I have a personal conflict.", 
+            "I am unable to join today as I am assisting a family member."],
+
+            message: ["Gising na po ako kanina, hindi lang po ako bumangon.", 
+            "I was there po spiritually, but not physically 50/50 po kumbaga.",
+            "Late na po ako, tinuloy ko na pong maging absent", 
+            "Papasok po sana ako, pero may bukas pa naman po.", 
+            "Friday na po kasi hihi."]
         },
+
         nosubmit: {
-            email: ["I encountered a technical error during upload.", "I accidentally submitted an outdated draft.", "My computer crashed during export.", "The portal appears to be throwing an error.", "I experienced a power outage, may I have an extension?"],
-            message: ["File is acting up! Can I send later?", "Computer crashed during submit! Fixing now.", "Uploaded wrong file, so sorry!", "Portal isn't working, can I email you?", "Having major internet issues, will send ASAP."]
+            email: ["I encountered a technical error during upload.", 
+            "I accidentally submitted an outdated draft.", 
+            "My computer crashed during export.", 
+            "The portal appears to be throwing an error.", 
+            "I experienced a power outage, may I have an extension?"],
+
+            message: ["Alam ko po gagawin.. yun po, alam ko lang", 
+            "Ggs.", 
+            "My notebook ate my dog.", 
+            "May notes po ako, pero nasa IG, copy paste ko nalang po", 
+            "If homework is your power, what are you without it?"]
         },
+
         lazy: {
-            email: ["I am currently feeling burnt out and need a brief recharge.", "I am struggling to focus on this task due to academic fatigue.", "I've been overwhelmed by other deadlines.", "I am currently experiencing a severe case of writer's block.", "I request a short extension to reset my productivity."],
-            message: ["Total burnout mode, taking a quick break.", "Struggling to focus today, gonna take it slow.", "Way too many deadlines, need a sec.", "Writer's block is real today!", "Taking a quick reset, will tackle this later."]
+            email: ["I am currently feeling burnt out and need a brief recharge.", 
+            "I am struggling to focus on this task due to academic fatigue.", 
+            "I've been overwhelmed by other deadlines.", 
+            "I am currently experiencing a severe case of writer's block.", 
+            "I request a short extension to reset my productivity."],
+
+            message: ["Wala naman pong problem, ako lang po.", 
+            "Play The Lazy Song by Bruno Mars.", 
+            "Wala pong nangyari, kase wala po akong ginawa.", 
+            "Nag stop dance po utak ko", 
+            "Due tomorrow, do tomorrow."]
         },
+
         group: {
-            email: ["Communication within our team has been quite challenging.", "I am waiting on critical inputs from other group members.", "The project scope was unclear, causing confusion.", "I have had to handle most of the work myself.", "Scheduling conflicts have made collaboration difficult."],
-            message: ["Team communication is super messy right now.", "Still waiting on the rest of the group.", "Confused on the project scope, need clarification.", "Doing most of the work, will be ready soon.", "Group schedules are all over the place!"]
+            email: ["Communication within our team has been quite challenging.", 
+            "I am waiting on critical inputs from other group members.", 
+            "The project scope was unclear, causing confusion.", 
+            "I have had to handle most of the work myself.", 
+            "Scheduling conflicts have made collaboration difficult."],
+
+            message: ["Nag agree po kaming lahat, wala pong sumunod", 
+            "Complete po kami...na walang ginawa.", 
+            "Group work po, pero kanya kanyang pong buhay.", 
+            "Babawi nalang daw po sila, pero ako binawian na.", 
+            "May groupchat po kami, pero walang nag cha-chat"]
         }
+
     };
     return data[reason][type];
 }
@@ -202,43 +286,4 @@ function copy(text){
 
 </body>
 </html>
-            email: ["Dear Professor, I cannot attend class today due to illness.", "Please excuse my absence; I have an urgent family matter.", "I am writing to let you know I cannot attend due to a medical appointment.", "Please accept my apologies for missing class; I have a personal conflict.", "I am unable to join today as I am assisting a family member."],
-            message: ["Feeling under the weather, won't make it.", "Can't make it today, family emergency.", "So sorry, have a forgotten appointment!", "Won't be in, dealing with personal stuff.", "Stuck at home for an urgent matter."]
-        },
-        nosubmit: {
-            email: ["I encountered a technical error during upload.", "I accidentally submitted an outdated draft.", "My computer crashed during export.", "The portal appears to be throwing an error.", "I experienced a power outage, may I have an extension?"],
-            message: ["File is acting up! Can I send later?", "Computer crashed during submit! Fixing now.", "Uploaded wrong file, so sorry!", "Portal isn't working, can I email you?", "Having major internet issues, will send ASAP."]
-        },
-        lazy: {
-            email: ["I am currently feeling burnt out and need a brief recharge.", "I am struggling to focus on this task due to academic fatigue.", "I've been overwhelmed by other deadlines.", "I am currently experiencing a severe case of writer's block.", "I request a short extension to reset my productivity."],
-            message: ["Total burnout mode, taking a quick break.", "Struggling to focus today, gonna take it slow.", "Way too many deadlines, need a sec.", "Writer's block is real today!", "Taking a quick reset, will tackle this later."],
-        },
-        group: {
-            email: ["Communication within our team has been quite challenging.", "I am waiting on critical inputs from other group members.", "The project scope was unclear, causing confusion.", "I have had to handle most of the work myself.", "Scheduling conflicts have made collaboration difficult."],
-            message: ["Team communication is super messy right now.", "Still waiting on the rest of the group.", "Confused on the project scope, need clarification.", "Doing most of the work, will be ready soon.", "Group schedules are all over the place!"]
-        }
-    };
-    return data[reason][type];
-}
-
-function loading(){
-    next('page5');
-    setTimeout(()=>{ generate(); next('page6'); }, 1000);
-}
-
-function generate(){
-    let reason = document.getElementById("reason").value;
-    let type = document.getElementById("type").value;
-    let list = gen(reason, type) || [];
-    let html = "";
-    list.forEach(e => {
-        html += `<div class="result-box">${e}<button class="copy-btn" onclick="copy('${e.replace(/'/g, "\\'")}')">Copy</button></div>`;
-    });
-    document.getElementById("output").innerHTML = html;
-}
-
-function copy(text){ navigator.clipboard.writeText(text); alert("Copied!"); }
-</script>
-</body>
-</html>
-
+Draft/index.html at main · gelo0623/Draft
